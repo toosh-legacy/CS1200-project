@@ -1,0 +1,12 @@
+.env
+backend/.env
+backend/node_modules/
+backend/uploads/
+*.log
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
