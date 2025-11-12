@@ -28,27 +28,7 @@ An AI-powered mobile chatbot application built with Flutter and Node.js, integra
 - **pdf-parse** - PDF text extraction
 - **mammoth** - Word document parsing
 
-## Project Structure
 
-```
-SkillSeeker/
-├── lib/
-│   ├── main.dart
-│   ├── models/
-│   │   └── message.dart
-│   ├── screens/
-│   │   └── chat_screen.dart
-│   ├── services/
-│   │   └── chat_service.dart
-│   └── widgets/
-│       ├── message_bubble.dart
-│       └── faq_dropdown.dart
-├── backend/
-│   ├── server.js
-│   ├── package.json
-│   └── .env
-└── pubspec.yaml
-```
 
 ## Setup Instructions
 
