@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../services/chat_service.dart';
@@ -51,11 +52,25 @@ class _ChatScreenState extends State<ChatScreen> {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc', 'docx', 'txt'],
+        withData: true, // Get bytes for web compatibility
       );
 
       if (result != null) {
         final chatService = Provider.of<ChatService>(context, listen: false);
-        await chatService.uploadAndAnalyzeFile(result.files.single.path!);
+        final file = result.files.single;
+        
+        // On web, path is not available, use bytes instead
+        if (kIsWeb) {
+          await chatService.uploadAndAnalyzeFile(
+            fileName: file.name,
+            fileBytes: file.bytes,
+          );
+        } else {
+          await chatService.uploadAndAnalyzeFile(
+            fileName: file.name,
+            filePath: file.path,
+          );
+        }
         _scrollToBottom();
       }
     } catch (e) {

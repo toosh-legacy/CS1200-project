@@ -6,10 +6,12 @@ An AI-powered mobile chatbot application built with Flutter and Node.js, integra
 
 - 💬 Real-time chat interface with AI responses
 - 📄 Document upload and analysis (PDF, DOC, DOCX, TXT)
+- 🎯 Career development focused AI with resume analysis
 - ❓ Frequently Asked Questions dropdown
 - 👍👎 Support/Don't Support feedback system
 - 🎨 Clean, modern UI matching the provided wireframe
-- 📱 Cross-platform mobile app (iOS & Android)
+- 📱 Cross-platform support (Web, iOS, Android, Windows)
+- 🤖 200-word limit AI responses for concise feedback
 
 ## Tech Stack
 
@@ -32,6 +34,11 @@ An AI-powered mobile chatbot application built with Flutter and Node.js, integra
 
 ## Setup Instructions
 
+### Prerequisites
+- Flutter SDK installed ([Installation Guide](https://docs.flutter.dev/get-started/install))
+- Node.js and npm installed
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+
 ### Backend Setup
 
 1. Navigate to the backend directory:
@@ -44,7 +51,7 @@ An AI-powered mobile chatbot application built with Flutter and Node.js, integra
    npm install
    ```
 
-3. Create a `.env` file and add your OpenAI API key:
+3. Create a `.env` file in the backend directory and add your OpenAI API key:
    ```
    OPENAI_API_KEY=your_openai_api_key_here
    PORT=3000
@@ -52,46 +59,78 @@ An AI-powered mobile chatbot application built with Flutter and Node.js, integra
 
 4. Start the server:
    ```bash
-   npm start
+   node server.js
    ```
    
-   For development with auto-reload:
-   ```bash
-   npm run dev
-   ```
-
-The backend will run on `http://localhost:3000`
+   The backend will run on `http://localhost:3000`
 
 ### Flutter App Setup
 
-1. Make sure you have Flutter installed. Check with:
+1. Make sure Flutter is properly installed:
    ```bash
    flutter doctor
    ```
 
-2. Install dependencies:
+2. From the project root directory, install Flutter dependencies:
    ```bash
    flutter pub get
    ```
 
-3. Update the backend URL in `lib/services/chat_service.dart`:
-   - For Android emulator: `http://10.0.2.2:3000`
-   - For iOS simulator: `http://localhost:3000`
-   - For physical device: Use your computer's IP address
+3. **Important**: The backend URL is already configured in `lib/services/chat_service.dart`:
+   - For **Web**: `http://localhost:3000` (default)
+   - For **Android emulator**: Change to `http://10.0.2.2:3000`
+   - For **iOS simulator**: `http://localhost:3000`
+   - For **physical device**: Use your computer's IP address (e.g., `http://192.168.1.x:3000`)
 
-4. Run the app:
+## Running the App
+
+### Run on Web (Recommended for Development)
+
+1. Make sure the backend server is running in a separate terminal
+2. Run the Flutter app:
+   ```bash
+   flutter run -d chrome
+   ```
+3. To view in mobile format, press F12 in Chrome, then Ctrl+Shift+M to toggle device toolbar
+
+### Run on Android Emulator
+
+1. Update backend URL in `lib/services/chat_service.dart` to `http://10.0.2.2:3000`
+2. Start an Android emulator
+3. Make sure the backend server is running
+4. Run:
    ```bash
    flutter run
    ```
 
+### Run on Physical Device
 
-## Quick Start
-Start backend
-node server.js
-Start flutter
-flutter emulators --launch Medium_Phone_API_36.1
-timeout /t 15 /nobreak
-flutter run
+1. Find your computer's IP address:
+   - Windows: `ipconfig` (look for IPv4 Address)
+   - Mac/Linux: `ifconfig` or `ip addr`
+2. Update backend URL in `lib/services/chat_service.dart` to `http://YOUR_IP:3000`
+3. Connect your device and enable USB debugging
+4. Make sure the backend server is running
+5. Run:
+   ```bash
+   flutter run
+   ```
+
+## Quick Start (All Platforms)
+
+1. **Terminal 1** - Start backend:
+   ```bash
+   cd backend
+   node server.js
+   ```
+
+2. **Terminal 2** - Run Flutter app:
+   ```bash
+   flutter run -d chrome
+   ```
+
+That's it! The app should open in Chrome and be ready to use.
+
 ## API Endpoints
 
 ### POST /api/chat

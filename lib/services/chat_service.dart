@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/message.dart';
@@ -9,7 +10,8 @@ class ChatService extends ChangeNotifier {
   
   // Update this to your backend URL
   // For Android Emulator, use 10.0.2.2 instead of localhost
-  final String _baseUrl = 'http://10.0.2.2:3000';
+  // For web, use localhost
+  final String _baseUrl = 'http://localhost:3000';
 
   List<Message> get messages => _messages;
   bool get isLoading => _isLoading;
@@ -72,12 +74,16 @@ class ChatService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> uploadAndAnalyzeFile(String filePath) async {
+  Future<void> uploadAndAnalyzeFile({
+    required String fileName,
+    String? filePath,
+    Uint8List? fileBytes,
+  }) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      debugPrint('Uploading file from: $filePath');
+      debugPrint('Uploading file: $fileName');
       debugPrint('Backend URL: $_baseUrl/api/upload');
       
       var request = http.MultipartRequest(
@@ -85,7 +91,18 @@ class ChatService extends ChangeNotifier {
         Uri.parse('$_baseUrl/api/upload'),
       );
       
-      request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      // Use bytes for web, path for mobile
+      if (fileBytes != null) {
+        request.files.add(http.MultipartFile.fromBytes(
+          'file',
+          fileBytes,
+          filename: fileName,
+        ));
+      } else if (filePath != null) {
+        request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      } else {
+        throw Exception('No file data provided');
+      }
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
@@ -99,7 +116,7 @@ class ChatService extends ChangeNotifier {
         // Add user message about upload
         final userMessage = Message(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
-          text: '📄 Uploaded resume: ${filePath.split('/').last.split('\\').last}',
+          text: '📄 Uploaded resume: $fileName',
           isUser: true,
           timestamp: DateTime.now(),
         );
