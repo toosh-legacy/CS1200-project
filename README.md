@@ -84,6 +84,14 @@ The backend will run on `http://localhost:3000`
    flutter run
    ```
 
+
+## Quick Start
+Start backend
+node server.js
+Start flutter
+flutter emulators --launch Medium_Phone_API_36.1
+timeout /t 15 /nobreak
+flutter run
 ## API Endpoints
 
 ### POST /api/chat
